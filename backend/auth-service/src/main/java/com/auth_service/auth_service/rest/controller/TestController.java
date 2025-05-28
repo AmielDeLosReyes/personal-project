@@ -3,16 +3,21 @@ package com.auth_service.auth_service.rest.controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/test")
+@RequestMapping("/api")
 public class TestController {
 
-    @GetMapping("/all")
+    @GetMapping("/test/all")
     public String allAccess() {
         return "Public Content.";
     }
 
-    @GetMapping("/user")
-    public String userAccess() {
-        return "User Content.";
+    @GetMapping("/contractor")
+    public String contractorAccess() {
+        return "Contractor Content.";
+    }
+
+    @GetMapping("/rea")
+    public String reaAccess() {
+        return "REA Content.";
     }
 }

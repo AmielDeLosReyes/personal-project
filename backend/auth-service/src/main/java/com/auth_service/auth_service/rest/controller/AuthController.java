@@ -1,6 +1,7 @@
 package com.auth_service.auth_service.rest.controller;
 
 import com.auth_service.auth_service.config.security.JwtUtil;
+import com.auth_service.auth_service.rest.model.Role;
 import com.auth_service.auth_service.rest.model.UserEntity;
 import com.auth_service.auth_service.rest.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,20 +34,30 @@ public class AuthController {
                 )
         );
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return jwtUtils.generateToken(userDetails.getUsername());
+        return jwtUtils.generateToken(userDetails.getUsername(), userDetails.getAuthorities());
     }
-    @PostMapping("/signup")
-    public String registerUser(@RequestBody UserEntity user) {
+
+    @PostMapping("/signup/{role}")
+    public String registerUser(@PathVariable String role, @RequestBody UserEntity user) {
         if (userRepository.existsByUsername(user.getUsername())) {
             return "Error: Username is already taken!";
         }
-        // Create new user's account
+
+        Role userRole;
+        try {
+            userRole = Role.valueOf("ROLE_" + role.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return "Error: Invalid role. Allowed roles are: CONTRACTOR, REA, ADMIN";
+        }
+
         UserEntity newUser = new UserEntity(
                 null,
                 user.getUsername(),
-                encoder.encode(user.getPassword())
+                encoder.encode(user.getPassword()),
+                userRole
         );
+
         userRepository.save(newUser);
-        return "User registered successfully!";
+        return "User registered successfully with role: " + userRole.name();
     }
 }
