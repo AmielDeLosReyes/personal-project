@@ -21,4 +21,20 @@ export async function signup(payload: SignupPayload, role: string) {
     }
   
     return response.json(); // assuming response contains user info or success message
-  }
+}
+
+export async function login(userName: string, password: string) {
+    const response = await fetch("http://localhost:8080/api/auth/signin", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userName, password }),
+    });
+  
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || "Failed to login");
+    }
+  
+    return response.json();
+}
+  

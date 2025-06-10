@@ -1,44 +1,18 @@
 import React, { useState } from "react";
 import { signup } from "../services/authService";
+import { useNavigate } from "react-router-dom";
+import Input from "./Input";
 
 type Role = "contractor" | "rea";
 
 type SignupFormProps = {
   role: Role;
   onBack: () => void;
+  onSwitchToLogin: () => void;
 };
 
-const Input = ({
-  id,
-  label,
-  type = "text",
-  placeholder,
-  value,
-  onChange,
-}: {
-  id: string;
-  label: string;
-  type?: string;
-  placeholder?: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <div className="mb-4 text-left">
-    <label htmlFor={id} className="block mb-1 text-gray-300 font-medium text-sm">
-      {label}
-    </label>
-    <input
-      id={id}
-      type={type}
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-      className="w-full rounded-md p-3 bg-neutral-700 border border-neutral-600 text-white focus:outline-none focus:ring-2 focus:ring-gray-400"
-    />
-  </div>
-);
-
-export default function SignupForm({ role, onBack }: SignupFormProps) {
+export default function SignupForm({ role, onBack, onSwitchToLogin }: SignupFormProps) {
+  const navigate = useNavigate(); 
   const [form, setForm] = useState({
     fullName: '',
     userName: '',
@@ -128,6 +102,13 @@ export default function SignupForm({ role, onBack }: SignupFormProps) {
       >
         Back to Role Selection
       </button>
+      <button
+        onClick={onSwitchToLogin}
+        className="mt-4 text-gray-400 underline hover:text-gray-300 block mx-auto"
+        >
+        Already have an account? Sign in
+    </button>
+
     </div>
   );
 }

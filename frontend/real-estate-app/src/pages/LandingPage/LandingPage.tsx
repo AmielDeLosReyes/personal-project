@@ -1,5 +1,6 @@
 import { useState } from "react";
 import SignupForm from "../../components/SignupForm";
+import LoginForm from "../../components/LoginForm";
 import BackgroundBlobs from "../../components/BackgroundBlobs";
 import RoleSelection from "../../components/RoleSelection";
 
@@ -11,6 +12,7 @@ type Role = "contractor" | "rea" | null;
 
 function LandingPage({ title }: Props) {
   const [role, setRole] = useState<Role>(null);
+  const [mode, setMode] = useState<"signup" | "login">("signup");
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-zinc-900 via-slate-900 to-gray-900 text-white flex items-center justify-center overflow-hidden relative px-4 py-10">
@@ -26,8 +28,17 @@ function LandingPage({ title }: Props) {
 
         {role === null ? (
           <RoleSelection onSelect={setRole} />
+        ) : mode === "signup" ? (
+          <SignupForm
+            role={role}
+            onBack={() => setRole(null)}
+            onSwitchToLogin={() => setMode("login")}
+          />
         ) : (
-          <SignupForm role={role} onBack={() => setRole(null)} />
+          <LoginForm
+            onBack={() => setMode("signup")}
+            role={role}
+          />
         )}
       </div>
     </div>
